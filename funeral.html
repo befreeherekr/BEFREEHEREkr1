@@ -1848,7 +1848,20 @@ h1, h2, h3, h4, p, li, a, button, span, div {
       <p class="pstep-d">장례 이후에도 기억은 이어집니다. 추모 페이지, 삶의 기록 아카이브, 지속적인 사후 케어를 제공합니다.</p>
     </div>
   </div>
-  <div class="rv" style="margin-top:4rem;display:flex;align-items:center;gap:1.6rem;">
+  <div class="rv" style="margin-top:4rem;display:flex;align-items:center;gap:1.6rem;flex-wrap:wrap;">
+    <button id="funeralProcessBtn" style="
+      font-family:'Noto Sans KR',sans-serif;font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+      padding:13px 28px;background:transparent;
+      border:.5px solid rgba(201,185,154,.28);border-radius:100px;
+      color:rgba(201,185,154,.7);cursor:pointer;transition:border-color .2s,color .2s;
+    "
+    onmouseover="this.style.borderColor='rgba(201,185,154,.7)';this.style.color='#c8a96e';"
+    onmouseout="this.style.borderColor='rgba(201,185,154,.28)';this.style.color='rgba(201,185,154,.7)';">
+      장례 절차 보기
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left:8px;vertical-align:middle;">
+        <path d="M5 12h14M12 5l7 7-7 7"/>
+      </svg>
+    </button>
     <button id="dayModalBtn" style="
       font-family:'Noto Sans KR',sans-serif;font-size:11px;letter-spacing:.14em;text-transform:uppercase;
       padding:13px 28px;background:transparent;
@@ -1864,6 +1877,615 @@ h1, h2, h3, h4, p, li, a, button, span, div {
     </button>
   </div>
 </section>
+
+<!-- ────────────── FUNERAL PROCESS MODAL ────────────── -->
+<div id="fpOverlay" style="
+  position:fixed;inset:0;z-index:2000;
+  background:rgba(10,9,8,.88);backdrop-filter:blur(18px);
+  display:flex;
+  padding:1.5rem;opacity:0;pointer-events:none;
+  transition:opacity .35s ease;
+">
+  <div id="fpInner" style="
+    width:100%;max-width:700px;
+    background:#111009;
+    border:.5px solid rgba(200,169,110,.16);
+    border-top:1.5px solid #c8a96e;
+    border-radius:4px;
+    padding:3.5rem 3.5rem 3rem;
+    position:relative;
+    transform:translateY(22px);
+    transition:transform .38s ease;
+    max-height:90svh;overflow-y:auto;
+  ">
+
+    <button id="fpClose" style="
+      position:absolute;top:1.6rem;right:1.8rem;
+      width:32px;height:32px;background:transparent;border:none;cursor:pointer;
+      display:flex;align-items:center;justify-content:center;
+      color:rgba(232,226,217,.3);transition:color .2s;
+    "
+    onmouseover="this.style.color='#e8e2d9';"
+    onmouseout="this.style.color='rgba(232,226,217,.3)';">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+
+    <div style="font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:#c8a96e;margin-bottom:1.6rem;display:flex;align-items:center;gap:10px;">
+      <span style="width:16px;height:.5px;background:#c8a96e;display:inline-block;"></span>장례 절차
+    </div>
+    <h3 style="font-family:'Noto Serif KR',serif;font-size:22px;font-weight:300;line-height:1.45;color:#e8e2d9;margin-bottom:.8rem;letter-spacing:-.01em;">
+      비프리히어 장례 절차와<br>일정 한눈에 보기
+    </h3>
+    <p style="font-size:13px;color:rgba(232,226,217,.42);font-weight:300;line-height:1.8;margin-bottom:2.8rem;">각 단계를 눌러 상세 내용을 확인하세요.</p>
+
+    <!-- 모바일 탭 네비게이션 (580px 이하에서만 표시) -->
+    <div class="fp-tab-nav" id="fpTabNav">
+      <button class="fp-tab-btn fp-tab-active" onclick="fpSwitchTab(0)">
+        <span class="fp-tab-day">Day 1</span>
+        <span class="fp-tab-label">첫째 날</span>
+      </button>
+      <button class="fp-tab-btn" onclick="fpSwitchTab(1)">
+        <span class="fp-tab-day">Day 2</span>
+        <span class="fp-tab-label">둘째 날</span>
+      </button>
+    </div>
+
+    <!-- ══ DAY 1 ══ -->
+    <div class="fp-tab-panel fp-panel-active" id="fpPanel0">
+    <div class="fp-day-label">
+      <span>장례 1일차</span>
+      <div class="fp-day-line"></div>
+    </div>
+
+    <div class="fp-flow">
+
+      <!-- 01 운명 -->
+      <div class="fp-item">
+        <div class="fp-stem">
+          <div class="fp-dot"></div>
+          <div class="fp-vline"></div>
+        </div>
+        <div class="fp-step" onclick="fpToggle(this)">
+          <div class="fp-step-head">
+            <span class="fp-num">01</span>
+            <span class="fp-title">운명</span>
+            <svg class="fp-chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+          <div class="fp-body">
+            <p>고인이 떠나신 후, 비프리히어에 연락 주시면 장례지도사가 즉시 현장으로 출발합니다. 떠나보내는 일은 갑작스럽게 찾아오기 마련입니다. 사전 상담을 통해 필요한 사항들을 미리 정해두신다면, 그 순간 가족이 감당해야 할 무게를 조금 덜 수 있습니다.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 02 분기: 병원 / 자택 -->
+      <div class="fp-item fp-item-fork">
+        <div class="fp-stem">
+          <div class="fp-dot fp-dot-sm"></div>
+          <div class="fp-vline"></div>
+        </div>
+        <div class="fp-fork-wrap">
+          <div class="fp-fork-label">임종 장소에 따라</div>
+          <div class="fp-fork-grid">
+            <div class="fp-step fp-branch" onclick="fpToggle(this)">
+              <div class="fp-step-head">
+                <span class="fp-num fp-num-sm">2-1</span>
+                <span class="fp-title">병원 임종</span>
+                <svg class="fp-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+              </div>
+              <div class="fp-body">
+                <p>비프리히어에 연락 주시면 전화 상담을 통해 장례식장 예약과 화장 일정까지 함께 잡아드립니다. 접수 시점에 아직 정해지지 않은 사항들은 장례식장에서 지도사와 직접 상의하며 결정하셔도 됩니다. 병원에서 임종하신 경우, 담당 의사가 사망진단서를 발급해 주므로 별도의 서류 준비는 필요하지 않습니다.</p>
+              </div>
+            </div>
+            <div class="fp-step fp-branch" onclick="fpToggle(this)">
+              <div class="fp-step-head">
+                <span class="fp-num fp-num-sm">2-2</span>
+                <span class="fp-title">자택 임종</span>
+                <svg class="fp-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+              </div>
+              <div class="fp-body">
+                <p>자택에서 임종하신 경우에는 <strong style="color:#e8e2d9;font-weight:400;">112와 비프리히어 양쪽에 모두 연락</strong>하셔야 합니다. 자택 사망의 경우 경찰이 현장에 출동하여 범죄 여부를 확인하는 사체검안 절차가 필수적으로 선행되어야 장례를 진행할 수 있습니다. 검안은 통상 1시간 내외 소요되며, 이후 사체검안서가 발급됩니다.</p>
+                <div class="fp-note">※ 사망진단서 또는 사체검안서는 장례식장, 화장장, 금융기관 등 다수의 기관에 제출해야 합니다. <strong style="color:#c8a96e;font-weight:400;">최소 7부 이상</strong> 발급해 두시는 것을 권장합니다.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 03 안치 -->
+      <div class="fp-item">
+        <div class="fp-stem">
+          <div class="fp-dot"></div>
+          <div class="fp-vline"></div>
+        </div>
+        <div class="fp-step" onclick="fpToggle(this)">
+          <div class="fp-step-head">
+            <span class="fp-num">03</span>
+            <span class="fp-title">안치</span>
+            <svg class="fp-chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+          <div class="fp-body">
+            <p>일정이 확정된 장례식장 안치실에 고인을 모십니다. 시기에 따라 원하는 장례식장을 이용하지 못할 수도 있으니, 미리 몇 곳을 염두에 두시는 편이 좋습니다.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 04 계약 및 일정 -->
+      <div class="fp-item">
+        <div class="fp-stem">
+          <div class="fp-dot"></div>
+          <div class="fp-vline"></div>
+        </div>
+        <div class="fp-step" onclick="fpToggle(this)">
+          <div class="fp-step-head">
+            <span class="fp-num">04</span>
+            <span class="fp-title">계약 및 일정 확정</span>
+            <svg class="fp-chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+          <div class="fp-body">
+            <p>안치 후 장례식장 시설 이용 계약과 장례 서비스 계약을 진행합니다. 화장장 예약 가능 일정을 확인하여 전체 장례 일정을 확정합니다.</p>
+            <div class="fp-note">※ 화장장 예약 상황에 따라 전체 일정이 조정될 수 있습니다.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 05 문자 발송 분기 -->
+      <div class="fp-item fp-item-fork">
+        <div class="fp-stem">
+          <div class="fp-dot fp-dot-sm"></div>
+          <div class="fp-vline"></div>
+        </div>
+        <div class="fp-fork-wrap">
+          <div class="fp-fork-label">문자 발송</div>
+          <div class="fp-fork-grid">
+            <div class="fp-step fp-branch" onclick="fpToggle(this)">
+              <div class="fp-step-head">
+                <span class="fp-num fp-num-sm">05a</span>
+                <span class="fp-title">부고 문자</span>
+                <svg class="fp-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+              </div>
+              <div class="fp-body">
+                <p>무빈소 장례에서 부고 문자는 고인과 마지막으로 직접 인사를 나누고자 하는 직계가족 및 가장 가까운 지인에게만 조용히 전달합니다. 입관 시간은 약 30분으로, 함께하실 분들께만 일시와 장소를 안내합니다.</p>
+                <div class="fp-bubble">
+                  <div class="fp-bubble-label">부고 문자 예시</div>
+                  <p>[부고] 홍OO의 모친 김OO님께서 2025년 4월 15일 별세하셨습니다.
+고인과 마지막 인사를 나누실 분들께 입관 일정을 안내드립니다.
+고인 : 김OO (향년 OO세)
+입관 일시 : 2025.04.17 10:00 (약 30분간 진행됩니다)
+장소 : OO장례식장 OO호
+상주 : 아들 홍OO
+연락처 : 010-0000-0000
+마음을 담아주실 곳 홍OO OO은행 000-000-000000</p>
+                </div>
+              </div>
+            </div>
+            <div class="fp-step fp-branch" onclick="fpToggle(this)">
+              <div class="fp-step-head">
+                <span class="fp-num fp-num-sm">05b</span>
+                <span class="fp-title">추모식 초대 문자</span>
+                <svg class="fp-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+              </div>
+              <div class="fp-body">
+                <p>고인의 삶을 함께 기억하고 축복하는 자리로의 초대입니다. 추모식 초대 문자에 반드시 포함되어야 할 항목은 고인과 상주의 이름, 추모식 장소, 날짜와 시간입니다. 비대면으로 마음을 전하실 분들을 위해 계좌 정보를 함께 안내해 드리면 좋습니다.</p>
+                <div class="fp-bubble">
+                  <div class="fp-bubble-label">추모식 초대 문자 예시</div>
+                  <p>[추모식 초대] 홍OO의 모친 김OO님께서 2025년 4월 15일 별세하셨음을 삼가 알려드립니다. 고인의 삶을 함께 기억하고 축복하는 자리에 초대합니다.
+고인 : 김OO (향년 OO세)
+추모식 일시 : 2025.04.17 14:00
+추모식 장소 : OOO (주소)
+상주 : 미망인 OOO 아들 홍OO 딸 홍OO
+마음을 담아주실 곳 홍OO OO은행 000-000-000000</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /fp-flow day1 -->
+    </div><!-- /fp-tab-panel day1 -->
+
+    <!-- ══ DAY 2 ══ -->
+    <div class="fp-tab-panel" id="fpPanel1">
+    <div class="fp-day-label" style="margin-top:1.2rem;">
+      <span>장례 2일차</span>
+      <div class="fp-day-line"></div>
+    </div>
+
+    <div class="fp-flow">
+
+      <!-- 06 입관식 -->
+      <div class="fp-item">
+        <div class="fp-stem">
+          <div class="fp-dot"></div>
+          <div class="fp-vline"></div>
+        </div>
+        <div class="fp-step" onclick="fpToggle(this)">
+          <div class="fp-step-head">
+            <span class="fp-num">06</span>
+            <span class="fp-title">입관식</span>
+            <svg class="fp-chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+          <div class="fp-body">
+            <p>입관식은 고인의 몸을 관에 모시는 절차입니다. 비프리히어는 수의 대신 고인이 생전에 즐겨 입으시던 옷으로 입관하는 것을 기본으로 안내합니다. 원하시는 의상이 있다면 사전에 지도사에게 전달해 주시면 됩니다.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 07 화장 -->
+      <div class="fp-item">
+        <div class="fp-stem">
+          <div class="fp-dot"></div>
+          <div class="fp-vline"></div>
+        </div>
+        <div class="fp-step" onclick="fpToggle(this)">
+          <div class="fp-step-head">
+            <span class="fp-num">07</span>
+            <span class="fp-title">발인 및 화장</span>
+            <svg class="fp-chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+          <div class="fp-body">
+            <p>입관 후 화장장으로 이동합니다. 화장 예약 시간 최소 2시간 전 도착을 권장합니다. 화장 후 유골 처리 방법(봉안, 수목장, 산골 등)은 가족의 뜻에 따라 결정하시면 됩니다. 비프리히어는 각 선택지에 대한 안내를 드립니다.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 08 분기: 추모식 / 복귀 -->
+      <div class="fp-item fp-item-fork">
+        <div class="fp-stem">
+          <div class="fp-dot fp-dot-sm"></div>
+          <div class="fp-vline fp-vline-last"></div>
+        </div>
+        <div class="fp-fork-wrap">
+          <div class="fp-fork-label">이후 일정</div>
+          <div class="fp-fork-grid">
+            <div class="fp-step fp-branch" onclick="fpToggle(this)">
+              <div class="fp-step-head">
+                <span class="fp-num fp-num-sm">08a</span>
+                <span class="fp-title">추모식 장소 이동 또는 장례식장 복귀</span>
+                <svg class="fp-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+              </div>
+              <div class="fp-body">
+                <p>화장 후에는 사전에 기획된 일정에 따라 추모식 장소로 이동하거나, 장례식장으로 복귀합니다. 추모식을 진행하시는 경우, 추모식을 마친 후 장례식장으로 복귀합니다.</p>
+              </div>
+            </div>
+            <div class="fp-step fp-branch" onclick="fpToggle(this)">
+              <div class="fp-step-head">
+                <span class="fp-num fp-num-sm">08b</span>
+                <span class="fp-title">추모식</span>
+                <svg class="fp-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+              </div>
+              <div class="fp-body">
+                <p>추모식은 고인의 삶을 함께 기억하고 작별을 나누는 자리입니다. 형식과 일정은 비프리히어와 사전에 함께 설계합니다. 추모식에서는 고인이 살아온 이야기를 담은 영상이나 사진을 함께 보고, 고인이 좋아하던 음악을 틀거나, 참석자들이 직접 고인에 대한 기억을 나누기도 합니다.</p>
+                <p>가장 순수한 형태인 유골과 함께하며 고인을 추억하는 시간입니다. 고인의 취향과 삶의 방식을 반영한 다양한 형태의 추모식으로 기획되며, 정해진 형식이 아닌, 그 분만의 추모식을 함께합니다.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /fp-flow day2 -->
+    </div><!-- /fp-tab-panel day2 -->
+
+    <!-- 참고 사항 -->
+    <div style="margin-top:2.4rem;padding:1.3rem 1.5rem;background:rgba(201,185,154,.05);border:.5px solid rgba(201,185,154,.1);border-radius:4px;">
+      <p style="font-size:12px;color:rgba(201,185,154,.48);line-height:2;font-weight:300;">
+        · 화장장 예약 상황에 따라 장례가 3일 이상 소요될 수 있습니다.<br>
+        · 추모식의 일정, 장소, 형식은 비프리히어와 사전에 함께 기획합니다.
+      </p>
+    </div>
+
+    <p style="font-size:12px;font-weight:300;color:rgba(201,185,154,.3);letter-spacing:.04em;margin-top:2.4rem;padding-top:2rem;border-top:.5px solid rgba(201,185,154,.07);font-family:'Noto Serif KR',serif;">
+      비프리히어는 그 하루를 처음부터 끝까지 함께 설계합니다.
+    </p>
+
+  </div>
+</div>
+
+<style>
+/* fpOverlay 기본 정렬 (데스크탑) */
+#fpOverlay {
+  align-items:center;
+  justify-content:center;
+}
+.fp-day-label {
+  display:flex; align-items:center; gap:12px;
+  margin-bottom:1.4rem;
+}
+.fp-day-label span {
+  font-size:9px; letter-spacing:.24em; text-transform:uppercase;
+  color:rgba(201,185,154,.55);
+  border:.5px solid rgba(201,185,154,.2);
+  padding:4px 13px; border-radius:100px; white-space:nowrap;
+  font-family:'Noto Sans KR',sans-serif;
+}
+.fp-day-line { flex:1; height:.5px; background:rgba(201,185,154,.1); }
+
+/* 흐름 컨테이너 */
+.fp-flow { display:flex; flex-direction:column; }
+
+/* 아이템 행 (스템 + 카드) */
+.fp-item {
+  display:flex;
+  gap:0;
+  align-items:stretch;
+}
+
+/* 왼쪽 스템 (점 + 선) */
+.fp-stem {
+  display:flex; flex-direction:column; align-items:center;
+  width:32px; flex-shrink:0; padding-top:1.05rem;
+}
+.fp-dot {
+  width:9px; height:9px; border-radius:50%;
+  background:#c8a96e;
+  border:1.5px solid #c8a96e;
+  flex-shrink:0; z-index:1;
+}
+.fp-dot-sm {
+  width:6px; height:6px;
+  background:transparent;
+  border:1px solid rgba(201,185,154,.5);
+}
+.fp-vline {
+  flex:1; width:1px;
+  background:linear-gradient(to bottom, rgba(201,185,154,.35) 0%, rgba(201,185,154,.12) 100%);
+  margin-top:4px;
+}
+.fp-vline-last { opacity:0; }
+
+/* 카드 */
+.fp-step {
+  flex:1;
+  border:.5px solid rgba(201,185,154,.12);
+  border-radius:4px;
+  overflow:hidden;
+  cursor:pointer !important;
+  margin-bottom:8px;
+  transition:border-color .22s, background .22s;
+  background:rgba(201,185,154,.025);
+  margin-left:10px;
+}
+.fp-step:hover { border-color:rgba(201,185,154,.28); background:rgba(201,185,154,.05); }
+.fp-step.open  { border-color:rgba(201,185,154,.3); background:rgba(201,185,154,.05); }
+
+.fp-step-head {
+  display:flex; align-items:center; gap:.9rem;
+  padding:1rem 1.3rem;
+  user-select:none;
+}
+/* FIX 1 & 2: 숫자 크기 키우고 열린 상태에서만 골드 */
+.fp-num {
+  font-family:'Cormorant Garamond',serif;
+  font-size:16px; font-weight:400;
+  color:rgba(201,185,154,.35);
+  letter-spacing:.04em;
+  min-width:26px;
+  transition:color .22s;
+}
+.fp-num-sm { font-size:12px; min-width:26px; }
+.fp-step.open .fp-num { color:#c8a96e; }
+
+.fp-title {
+  font-family:'Noto Serif KR',serif;
+  font-size:14px; font-weight:300;
+  color:rgba(232,226,217,.75);
+  flex:1; transition:color .22s;
+}
+.fp-step.open .fp-title { color:#e8e2d9; }
+
+.fp-chev {
+  color:rgba(201,185,154,.28);
+  transition:transform .28s, color .22s;
+  flex-shrink:0;
+}
+.fp-step.open .fp-chev { transform:rotate(180deg); color:rgba(201,185,154,.65); }
+
+/* FIX 1: 분기 카드는 hover/open 독립 처리 — 형제 영향 없음 */
+.fp-branch {
+  background:rgba(201,185,154,.018);
+  margin-left:0;
+}
+
+.fp-body {
+  display:none;
+  padding:0 1.3rem 1.3rem;
+  border-top:.5px solid rgba(201,185,154,.07);
+  animation:fpIn .25s ease;
+}
+.fp-step.open .fp-body { display:block; }
+.fp-body p {
+  padding-top:1rem;
+  font-size:13.5px; line-height:2;
+  color:rgba(232,226,217,.55); font-weight:300;
+  font-family:'Noto Sans KR',sans-serif;
+}
+
+/* FIX 3: 분기 래퍼 — 연결선 포함 */
+.fp-item-fork {
+  align-items:flex-start;
+}
+.fp-fork-wrap {
+  flex:1; margin-left:10px; margin-bottom:8px;
+}
+.fp-fork-label {
+  font-size:9.5px; letter-spacing:.18em; text-transform:uppercase;
+  color:rgba(201,185,154,.38); margin-bottom:8px;
+  font-family:'Noto Sans KR',sans-serif;
+  padding-left:2px;
+}
+.fp-fork-grid {
+  display:grid; grid-template-columns:1fr 1fr; gap:8px;
+}
+
+/* 노트 박스 */
+.fp-note {
+  margin-top:1rem; padding:.9rem 1.1rem;
+  background:rgba(201,185,154,.06);
+  border-left:1.5px solid rgba(201,185,154,.3);
+  border-radius:2px;
+  font-size:12px; color:rgba(201,185,154,.65); line-height:1.9;
+  font-family:'Noto Sans KR',sans-serif;
+}
+
+/* 말풍선 */
+.fp-bubble {
+  margin-top:1.1rem;
+  background:#0e0d0b;
+  border:.5px solid rgba(201,185,154,.13);
+  border-radius:8px 8px 8px 2px;
+  padding:1.1rem 1.3rem;
+}
+.fp-bubble-label {
+  font-size:9px; letter-spacing:.16em; text-transform:uppercase;
+  color:rgba(201,185,154,.35); margin-bottom:.7rem;
+  font-family:'Noto Sans KR',sans-serif;
+}
+.fp-bubble p {
+  font-size:12px; line-height:2; color:rgba(232,226,217,.58);
+  font-family:'Noto Serif KR',serif;
+  white-space:pre-line; padding-top:0;
+}
+
+@keyframes fpIn {
+  from { opacity:0; transform:translateY(-4px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+#fpInner::-webkit-scrollbar { width:2px; }
+#fpInner::-webkit-scrollbar-thumb { background:rgba(201,185,154,.2); }
+
+/* 탭 네비 — 데스크탑에서 숨김 */
+.fp-tab-nav { display:none; }
+
+@media(max-width:580px){
+  #fpOverlay { padding:0 !important; align-items:flex-end !important; }
+  #fpInner {
+    padding:2rem 1.1rem 2rem !important;
+    max-width:100% !important;
+    border-radius:12px 12px 0 0 !important;
+    max-height:92svh !important;
+  }
+  .fp-fork-grid { grid-template-columns:1fr; }
+  .fp-stem { width:24px; }
+
+  /* 탭 네비 표시 */
+  .fp-tab-nav {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+    margin-bottom:2rem;
+    background:rgba(201,185,154,.04);
+    border:.5px solid rgba(201,185,154,.12);
+    border-radius:6px;
+    padding:5px;
+  }
+  .fp-tab-btn {
+    display:flex; flex-direction:column; align-items:center; gap:3px;
+    padding:10px 0;
+    background:transparent;
+    border:none;
+    border-radius:4px;
+    cursor:pointer !important;
+    transition:background .2s;
+  }
+  .fp-tab-btn.fp-tab-active {
+    background:rgba(201,185,154,.12);
+  }
+  .fp-tab-day {
+    font-family:'Cormorant Garamond',serif;
+    font-size:16px; font-weight:400;
+    color:rgba(201,185,154,.4);
+    transition:color .2s;
+    letter-spacing:.04em;
+  }
+  .fp-tab-btn.fp-tab-active .fp-tab-day { color:#c8a96e; }
+  .fp-tab-label {
+    font-family:'Noto Sans KR',sans-serif;
+    font-size:10px; letter-spacing:.12em;
+    color:rgba(232,226,217,.3);
+    transition:color .2s;
+  }
+  .fp-tab-btn.fp-tab-active .fp-tab-label { color:rgba(232,226,217,.6); }
+
+  /* 탭 패널 전환 */
+  .fp-tab-panel {
+    display:none;
+    animation:fpTabIn .25s ease;
+  }
+  .fp-tab-panel.fp-panel-active { display:block; }
+
+  /* 데스크탑용 day 레이블은 모바일에서 숨김 */
+  .fp-day-label { display:none; }
+}
+
+/* 데스크탑에서는 패널 항상 표시 */
+@media(min-width:581px){
+  .fp-tab-panel { display:block !important; }
+}
+
+@keyframes fpTabIn {
+  from { opacity:0; transform:translateY(6px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+</style>
+
+<script>
+(function(){
+  var overlay = document.getElementById('fpOverlay');
+  var inner   = document.getElementById('fpInner');
+  var openBtn = document.getElementById('funeralProcessBtn');
+  var closeBtn= document.getElementById('fpClose');
+
+  function openFP() {
+    overlay.style.display = 'flex';
+    overlay.style.pointerEvents = 'all';
+    document.body.style.overflow = 'hidden';
+    fpSwitchTab(0);
+    // 모바일: 아래서 위로, 데스크탑: 위에서 아래로
+    var isMobile = window.innerWidth <= 580;
+    inner.style.transform = isMobile ? 'translateY(40px)' : 'translateY(22px)';
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){
+        overlay.style.opacity = '1';
+        inner.style.transform = 'translateY(0)';
+      });
+    });
+  }
+  function closeFP() {
+    overlay.style.opacity = '0';
+    inner.style.transform = 'translateY(22px)';
+    document.body.style.overflow = '';
+    setTimeout(function(){ overlay.style.pointerEvents = 'none'; }, 350);
+  }
+
+  if (openBtn)  openBtn.addEventListener('click', openFP);
+  if (closeBtn) closeBtn.addEventListener('click', closeFP);
+  if (overlay)  overlay.addEventListener('click', function(e){ if(e.target===overlay) closeFP(); });
+  document.addEventListener('keydown', function(e){
+    if (e.key==='Escape' && overlay.style.opacity==='1') closeFP();
+  });
+})();
+
+function fpToggle(el) {
+  el.classList.toggle('open');
+}
+
+function fpSwitchTab(idx) {
+  // 580px 이하에서만 탭 전환
+  if (window.innerWidth > 580) return;
+  var panels = document.querySelectorAll('.fp-tab-panel');
+  var btns   = document.querySelectorAll('.fp-tab-btn');
+  panels.forEach(function(p, i){
+    p.classList.toggle('fp-panel-active', i === idx);
+  });
+  btns.forEach(function(b, i){
+    b.classList.toggle('fp-tab-active', i === idx);
+  });
+  // 스크롤 맨 위로
+  var inner = document.getElementById('fpInner');
+  if (inner) inner.scrollTop = 0;
+}
+</script>
 
 <!-- ────────────── DAY MODAL ────────────── -->
 <div id="dayModalOverlay" style="
@@ -3150,23 +3772,31 @@ document.querySelectorAll('[data-scroll]').forEach(el => {
       cPanelPre.style.display = 'none';
       cSubmitText.textContent = '연락 요청하기';
     }
-    scrollTop();
-    setTimeout(() => {
-      const first = (type === 'pre' ? cPanelPre : cPanelPost).querySelector('input');
-      if (first) first.focus();
-    }, 300);
+    // 패널 전환 직후 즉시 + 렌더링 후 한 번 더 강제 초기화
+    const box = document.getElementById('cModalBox');
+    if (box) box.scrollTop = 0;
+    requestAnimationFrame(() => { if (box) box.scrollTop = 0; });
   }
 
   // ── Open / Close ──
+  let _savedScrollY = 0;
   function openModal(source) {
     document.getElementById('mSource').value = source || '상담 문의';
     showStep0();
     cModal.classList.add('open');
+    _savedScrollY = window.scrollY;
     document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.top = '-' + _savedScrollY + 'px';
+    document.body.style.width = '100%';
   }
   function closeModal() {
     cModal.classList.remove('open');
     document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.width = '';
+    window.scrollTo(0, _savedScrollY);
   }
 
   // ── Chip selection ──
