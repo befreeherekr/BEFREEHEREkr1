@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://befreeherekr.com/sitemap.xml
